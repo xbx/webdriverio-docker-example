@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - 4444:4444
+    links:
+      - app
+  app:
+    build: .
+    ports:
+      - 3000:3000
+  testing:
+    build:
+      context: .
+      dockerfile: Dockerfile.testing
+    command: /wait-for-it.sh selenium:4444 -- /wait-for-it.sh app:3000 -- node /e2e.js
+    links:
+      - app
+      - selenium
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh

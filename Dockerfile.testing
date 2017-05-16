@@ -1,0 +1,8 @@
+FROM node:latest
+
+RUN npm install -g mocha --silent
+RUN npm install chai webdriverio --silent
+
+COPY e2e.js /
+
+CMD node e2e.js
